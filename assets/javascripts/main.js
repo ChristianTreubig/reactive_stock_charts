@@ -1,9 +1,21 @@
 var StockSymbol = React.createClass({displayName: 'StockSymbol',
+  handleChange: function() {
+    this.props.onUserInput(
+      this.refs.stockSymbolInput.value
+    );
+  },
+
   render: function() {
     return (
-      <div className="StockSymbol">
-        This is the stock symbol component.
-      </div>
+      <form className="StockSymbol">
+        <input 
+          type="text" 
+          placeholder="Enter a stock symbol..." 
+          value={this.props.stockSymbol}
+          ref="stockSymbolInput"
+          onChange={this.handleChange}
+        />
+      </form>
     );
   }
 });
@@ -19,11 +31,26 @@ var StockChart = React.createClass({displayName: 'StockChart',
 });
 
 var ContainerMain = React.createClass({displayName: 'ContainerMain',
+  getInitialState: function() {
+    return {
+      stockSymbol: ''
+    };
+  },
+  
+  handleUserInput: function(stockSymbol) {
+    this.setState({
+      stockSymbol: stockSymbol
+    });
+  },
+
   render: function() {
     return (
       <div className="ContainerMain">
         This is the main container.
-        <StockSymbol />
+        <StockSymbol 
+          stockSymbol={this.state.stockSymbol}
+          onUserInput={this.handleUserInput}
+        />
         <StockChart />
       </div>
     );
