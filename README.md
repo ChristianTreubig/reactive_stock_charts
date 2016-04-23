@@ -1,1 +1,3 @@
 # reactive_stock_charts
+
+This single-page app will display a chart that traces the price of a user-selected stock in real time. When the user enters a valid stock symbol in a text input, the appropriate chart will display. When the user changes the symbol, the chart will clear and start tracing the price of the newly selected stock. The dynamically updating prices will be obtained by frequently polling the Markit API via AJAX. The stack will consist of React, Jquery, and Chart.js.
