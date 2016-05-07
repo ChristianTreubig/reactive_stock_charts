@@ -19,25 +19,7 @@ var StockSymbol = React.createClass({displayName: 'StockSymbol',
 });
 
 var StockChart = React.createClass({displayName: 'StockChart',
-  // probably need to move this function to ContainerMain; update the stockPrice and stockQuoteTime state there so the props update in this component
-  getStockData: function(stockSymbol) {
-    var apiUrl = "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + this.props.stockSymbol;
-
-    $.ajax({
-      url: apiUrl,
-      dataType: "jsonp", // needs to be jsonp to avoid cross-origin error
-      jsonp: "jsoncallback",
-      success: function( data ) {
-        if (data.Status == "SUCCESS") {
-          // set state with data.LastPrice and data.Timestamp
-        }
-      }
-    });
-  },
-
   render: function() {
-    this.getStockData();
-    
     return (
       <div className="StockChart">
         This is the stock chart component.
@@ -61,6 +43,26 @@ var ContainerMain = React.createClass({displayName: 'ContainerMain',
   handleUserInput: function(stockSymbol) {
     this.setState({
       stockSymbol: stockSymbol
+    });
+    
+    this.getStockData(stockSymbol);
+  },
+  
+  getStockData: function(stockSymbol) {
+    var apiUrl = "http://dev.markitondemand.com/MODApis/Api/v2/Quote/jsonp?symbol=" + stockSymbol;
+
+    $.ajax({
+      url: apiUrl,
+      dataType: "jsonp", // needs to be jsonp to avoid cross-origin error
+      jsonp: "jsoncallback",
+      success: function( data ) {
+        if (data.Status == "SUCCESS") {
+          this.setState({
+            stockPrice: data.LastPrice,
+            stockQuoteTime: data.Timestamp
+          });
+        }
+      }.bind(this)
     });
   },
 
