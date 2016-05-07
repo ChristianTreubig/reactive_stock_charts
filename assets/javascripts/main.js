@@ -20,12 +20,15 @@ var StockSymbol = React.createClass({displayName: 'StockSymbol',
 
 var StockChart = React.createClass({displayName: 'StockChart',
   render: function() {
+    // Zip the price and time arrays: http://stackoverflow.com/a/22015771
     return (
       <div className="StockChart">
         This is the stock chart component.
         <h2>{this.props.stockSymbol}</h2>
         <div>{this.props.stockPrice}</div>
         <div>{this.props.stockQuoteTime}</div>
+        <div>{this.props.stockPriceArray}</div>
+        <div>{this.props.stockQuoteTimeArray}</div>
       </div>
     );
   }
@@ -36,7 +39,9 @@ var ContainerMain = React.createClass({displayName: 'ContainerMain',
     return {
       stockSymbol: "",
       stockPrice: "",
-      stockQuoteTime: ""
+      stockQuoteTime: "",
+      stockPriceArray: [],
+      stockQuoteTimeArray: []
     };
   },
   
@@ -59,7 +64,9 @@ var ContainerMain = React.createClass({displayName: 'ContainerMain',
         if (data.Status == "SUCCESS") {
           this.setState({
             stockPrice: data.LastPrice,
-            stockQuoteTime: data.Timestamp
+            stockQuoteTime: data.Timestamp,
+            stockPriceArray: this.state.stockPriceArray.concat([data.LastPrice]),
+            stockQuoteTimeArray: this.state.stockQuoteTimeArray.concat([data.Timestamp]),
           });
         }
       }.bind(this)
@@ -78,6 +85,8 @@ var ContainerMain = React.createClass({displayName: 'ContainerMain',
           stockSymbol={this.state.stockSymbol}
           stockPrice={this.state.stockPrice}
           stockQuoteTime={this.state.stockQuoteTime}
+          stockPriceArray={this.state.stockPriceArray}
+          stockQuoteTimeArray={this.state.stockQuoteTimeArray}
         />
       </div>
     );
